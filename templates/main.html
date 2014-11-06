@@ -27,13 +27,9 @@
             <p> Hello boys & girls 123</p>
 
             <section class="main">
-			 <form class="search" method="post" action="index.html" >
-				 <input type="text" name="q" placeholder="Search..." />
+			 <form class="search" autocomplete="off" method="post" action="index.html" >
+				 <input id="address_text_box" type="text" name="q" placeholder="Address..."/>
 				 <ul class="results" >
-					 <li><a href="index.html">Search Result #1<br /><span>Description...</span></a></li>
-					 <li><a href="index.html">Search Result #2<br /><span>Description...</span></a></li>
-			 		<li><a href="index.html">Search Result #3<br /><span>Description...</span></a></li>
-		         	<li><a href="index.html">Search Result #4</a></li>
 				 </ul>
 			 </form>
 		</section>
@@ -53,15 +49,21 @@
     <!-- main script -->
     <script src="{{ static_url("js/script.js") }}"></script>
 
-    {% if (google_analytics_id != False) %}
-    <!-- analytic party -->
     <script type="text/javascript">
-        var _gaq=[['_setAccount','{{ google_analytics_id }}'],['_trackPageview']];
-        (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-        g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-        s.parentNode.insertBefore(g,s)}(document,'script'));
+    	var addresses = ["Greean street", "Brown street", "Pink street"];
+
+    	jQuery('#address_text_box').on('input', function() {
+    	// do your stuff
+
+    		$( ".results" ).empty();
+    		console.log('SearchAddress called');
+    		for (i = 0; i < addresses.length; i++) { 
+			    $(".results").append("<li><a href=\"index.html\">" + addresses[i] + "</a></li>");
+			}
+    		
+    	});
+        
     </script>
-    {% end %}
 
     </body>
 </html>

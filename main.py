@@ -14,6 +14,8 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
+import config
+import Backend.FileParser as fileparser
 
 # import and define tornado-y things
 from tornado.options import define
@@ -50,11 +52,29 @@ class MainHandler(tornado.web.RequestHandler):
         )
 
 
+# Driver method 
+def driver():
+	print config.file['filename'] 
+	filename = config.file['filename']
+
+	print config.file['path']
+	path = config.file['path']
+
+	print os.path.isfile(path + filename)
+	inputFile = path + filename
+	filetype = config.file['type']
+	fp = fileparser.FileParser(inputFile, filetype)
+	fp.parseFile(config.file['columnnames'])
+	#fp.calculateDistance()
+
 # RAMMING SPEEEEEEED!
 def main():
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(Application())
     http_server.listen(tornado.options.options.port)
+
+    #Prepare data
+    driver()
 
     # start it up
     tornado.ioloop.IOLoop.instance().start()
