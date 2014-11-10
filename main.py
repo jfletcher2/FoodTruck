@@ -45,7 +45,7 @@ class Application(tornado.web.Application):
 
     # Driver method: Drives all parsing and data structure/load operations
     def driver(self):
-        print config.file['filename'] 
+        #print config.file['filename'] 
         filename = config.file['filename']
 
         print config.file['path']
