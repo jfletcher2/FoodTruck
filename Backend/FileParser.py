@@ -9,7 +9,6 @@
 # ------------------------------------------
 import csv
 import KDTree
-import Distance
 
 class FileParser():
 
