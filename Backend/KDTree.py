@@ -109,7 +109,7 @@ class LocationTree:
 			else:
 				self._put(location,locationid,currentnode.rightchild, invertedindex)
 				
-
+'''
 	# Prints the tree
 	def printTree(self, node):
 		if(node is None):
@@ -128,12 +128,12 @@ class LocationTree:
 			if(node.hasLeftChild):
 				print "Left child"
 				self.printTree(node.leftchild)
-
+'''
 	#Search the tree for nearest neighbors
 	def searchTree(self, location, nNeighbors = 5):
 		
-		print "Searching Tree"
-		print location
+		#print "Searching Tree"
+		#print location
 		nodesList = []
 		currentnode = self.root
 		index = 0
@@ -155,10 +155,12 @@ class LocationTree:
 			else:
 				index = 0
 
-		print len(nodesList)
+		#print len(nodesList)
+		'''
 		for node in nodesList:
 			print node.locationid
 			print node.location
+			'''
 		return self.findneighbors(self.root, location, 0, nNeighbors, nodesList)
 
 	#Finds the nearest n neighbors and add the location ids to the list variable "neighbors"
@@ -173,14 +175,14 @@ class LocationTree:
 
 		for n in nodesList:
 			if node is None:
-				print "Node is none"
+				#print "Node is none"
 				return neighborsList
 
 			else:
 				self.getNodeNChildNodeDistance(neighbors, neighborsList, location, n)
 				#search if the rightchild is closer to the target location
 				if(n.rightchild is not None):
-					print "Searching for right child"
+					#print "Searching for right child"
 					self.getNodeNChildNodeDistance(neighbors, neighborsList, location, n.rightchild)
 					#search if the right grandchild is closer
 					if(n.rightchild.rightchild is not None):
@@ -190,7 +192,7 @@ class LocationTree:
 						self.getNodeNChildNodeDistance(neighbors, neighborsList, location, n.rightchild.leftchild)
 				#search if the left child is closer to the target location
 				if(n.leftchild is not None):
-					print "searching for left child"
+					#print "searching for left child"
 					self.getNodeNChildNodeDistance(neighbors, neighborsList, location, n.leftchild)
 					#search if the right grandchild is closer
 					if(n.leftchild.rightchild is not None):
@@ -198,7 +200,7 @@ class LocationTree:
 					#search if the left grandchild is closer
 					if(n.leftchild.leftchild is not None):
 						self.getNodeNChildNodeDistance(neighbors, neighborsList, location, n.rightchild.leftchild)
-		print neighborsList
+		#print neighborsList
 		return neighborsList
 
 	#fetch node and child nodes information
@@ -206,11 +208,11 @@ class LocationTree:
 		if (n.visited):
 			return neighborsList
 		else:
-			print "On node : " + n.locationid
-			print "Distance between : (" + str(location[0]) + ", " + str(location[1]) + ") and (" + str(n.location[0]) + ", " + str(n.location[1]) + ")"
+			#print "On node : " + n.locationid
+			#print "Distance between : (" + str(location[0]) + ", " + str(location[1]) + ") and (" + str(n.location[0]) + ", " + str(n.location[1]) + ")"
 			distance = Distance.distance_on_unit_sphere(float(location[0]), float(location[1]), float(n.location[0]), float(n.location[1]))  * 3960
 			n.visited = True
-			print distance
+			#print distance
 			if len(neighborsList) < neighbors:
 				neighborsList[n.locationid] = distance
 			else:

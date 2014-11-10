@@ -91,7 +91,7 @@ class FileParser():
                # self.addresslookup = templookup
             i = i + 1
             #print templookup
-    
+    '''
     def calculateDistance(self):
         i = 0
         for row in self.filecontent:
@@ -108,7 +108,7 @@ class FileParser():
                 #print row
             if(i>50):
                 break
-
+                '''
 
 
     #Initializes and loads the location tree(KDTree)
