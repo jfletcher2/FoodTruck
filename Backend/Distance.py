@@ -1,5 +1,6 @@
 import math
 
+
 def distance_on_unit_sphere(lat1, long1, lat2, long2):
 
     # Convert latitude and longitude to 
@@ -24,8 +25,12 @@ def distance_on_unit_sphere(lat1, long1, lat2, long2):
     
     cos = (math.sin(phi1)*math.sin(phi2)*math.cos(theta1 - theta2) + 
            math.cos(phi1)*math.cos(phi2))
-    arc = math.acos( cos )
 
+    if(float(cos) > 1):
+        cos = 1
+
+    arc = math.acos(cos)
+    
     # Remember to multiply arc by the radius of the earth 
     # in your favorite set of units to get length.
     return arc

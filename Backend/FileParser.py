@@ -175,7 +175,7 @@ class FileParser():
             locTree = self.loadLocationTree()
             #print self.fileheader
             #Test search tree
-            locTree.searchTree(('37.7925359884311', '-122.3945932'))
+            #locTree.searchTree(('37.7925359884311', '-122.3945932'))
 
             return self.addresslookup['address']
         else:

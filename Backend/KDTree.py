@@ -53,7 +53,7 @@ class Node:
 
 
 class LocationTree:
-	
+
 	def __init__(self):
 		self.root = None
 		self.size = 0
@@ -197,10 +197,10 @@ class LocationTree:
 					self.getNodeNChildNodeDistance(neighbors, neighborsList, location, n.leftchild)
 					#search if the right grandchild is closer
 					if(n.leftchild.rightchild is not None):
-						self.getNodeNChildNodeDistance(neighbors, neighborsList, location, n.rightchild.rightchild)
+						self.getNodeNChildNodeDistance(neighbors, neighborsList, location, n.leftchild.rightchild)
 					#search if the left grandchild is closer
 					if(n.leftchild.leftchild is not None):
-						self.getNodeNChildNodeDistance(neighbors, neighborsList, location, n.rightchild.leftchild)
+						self.getNodeNChildNodeDistance(neighbors, neighborsList, location, n.leftchild.leftchild)
 		#print neighborsList
 		return neighborsList
 
@@ -209,8 +209,8 @@ class LocationTree:
 		if (n.visited):
 			return neighborsList
 		else:
-			#print "On node : " + n.locationid
-			#print "Distance between : (" + str(location[0]) + ", " + str(location[1]) + ") and (" + str(n.location[0]) + ", " + str(n.location[1]) + ")"
+			print "On node : " + n.locationid
+			print "Distance between : (" + str(location[0]) + ", " + str(location[1]) + ") and (" + str(n.location[0]) + ", " + str(n.location[1]) + ")"
 			distance = Distance.distance_on_unit_sphere(float(location[0]), float(location[1]), float(n.location[0]), float(n.location[1]))  * 3960
 			n.visited = True
 			#print distance

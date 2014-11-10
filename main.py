@@ -10,6 +10,7 @@
 #!/usr/bin/env python
 import os.path
 import tornado.escape
+from tornado.escape import json_encode
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
@@ -27,13 +28,14 @@ define("port", default=5000, help="run on the given port", type=int)
 class Application(tornado.web.Application):
     def __init__(self):
 
-        self.AddressIndex = {}
+        #self.AddressIndex = {}
+        self.fp = None
         #Prepare and load data
         self.driver()
 
         #Request Handler
         handlers = [
-            (r"/([^/]+)?", MainHandler, { 'AddressIndex' : self.AddressIndex}), 
+            (r"/([^/]+)?", MainHandler, { 'fileParser' : self.fp }), 
         ]
 
         settings = dict(
@@ -54,8 +56,8 @@ class Application(tornado.web.Application):
         #print os.path.isfile(path + filename)
         inputFile = path + filename
         filetype = config.file['type']
-        fp = fileparser.FileParser(inputFile, filetype)
-        self.AddressIndex = fp.parseFile(config.file['columnnames'])
+        self.fp = fileparser.FileParser(inputFile, filetype)
+        self.AddressIndex = self.fp.parseFile(config.file['columnnames'])
 
         #print self.AddressIndex
         #fp.calculateDistance()
@@ -64,9 +66,13 @@ class Application(tornado.web.Application):
 class MainHandler(tornado.web.RequestHandler):
 
     #Initialize method to pass in instance variables from driver method(Application class)
-    def initialize(self, AddressIndex):
-        self.AddressIndex = AddressIndex
-
+    def initialize(self, fileParser):
+        self.fp = fileParser
+        self.AddressIndex = self.fp.addresslookup['address']
+        self.filecontent = self.fp.filecontent
+        self.fileheader = self.fp.fileheader
+        self.locationTree = self.fp.locationTree
+        self.response = {'resonse' : {}}
 
     #Handles all get calls
     def get(self, q):
@@ -91,6 +97,58 @@ class MainHandler(tornado.web.RequestHandler):
             preaddress = self.get_argument("preaddress")
             
             self.write(json.dumps(self.fetchAddress(str(preaddress))))
+
+        if(q == "fetchNeighborsFromAddress"):
+
+            address = self.get_argument("address")
+
+            addressMap = self.fetchAddress(str(address))
+
+            
+
+            result = self.getNeighbours(addressMap, address)
+
+            self.write(json.dumps(result))
+
+    #Searches for the nearest neighbor and returns the location data
+    def getNeighbours(self, addressMap, address):
+
+        try:
+            searchlocationid = addressMap[address]
+            #look up for latitude and longitude of the location id
+            searchlocationdata = self.filecontent[searchlocationid]['data']
+            #search the location tree
+            neighbors = self.locationTree.searchTree(eval(searchlocationdata[self.fileheader['Location']]))
+
+            #print neighbors
+            #consolidate results to a map
+            return self.getNeighbourLocationData(neighbors)
+        except KeyError:
+            return { 'success' : False,
+                    'errorMessage' : 'Location not found'}
+
+    #getNeighbourLocationData loops through the neighbors dictionary and fetches all necessary data
+    def getNeighbourLocationData(self, neighbors):
+
+        result = {"success" : True, "result" : {}}
+
+        tempResult = result["result"]
+
+        for locationid, distance in neighbors.iteritems():
+            tempResult[locationid] = {
+                              'name' : self.filecontent[locationid]['data'][self.fileheader['Applicant']],
+                              'type' : self.filecontent[locationid]['data'][self.fileheader['FacilityType']],
+                              'food' : self.filecontent[locationid]['data'][self.fileheader['FoodItems']],
+                              'address' : self.filecontent[locationid]['data'][self.fileheader['Address']],
+                              'latitude' : eval(self.filecontent[locationid]['data'][self.fileheader['Location']])[0],
+                              'longitude' : eval(self.filecontent[locationid]['data'][self.fileheader['Location']])[1],
+                              'status' : self.filecontent[locationid]['data'][self.fileheader['Status']],
+                              'distance' : round(distance, 2)
+                            }
+                          
+            
+        return result
+
 
     #search the address and send the first five matches
     def fetchAddress(self, preaddress):
