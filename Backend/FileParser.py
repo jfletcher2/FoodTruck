@@ -8,8 +8,8 @@
 #
 # ------------------------------------------
 import csv
-import Distance
 import KDTree
+import Distance
 
 class FileParser():
 

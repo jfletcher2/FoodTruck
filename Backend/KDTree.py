@@ -109,7 +109,7 @@ class LocationTree:
 			else:
 				self._put(location,locationid,currentnode.rightchild, invertedindex)
 				
-'''
+	'''
 	# Prints the tree
 	def printTree(self, node):
 		if(node is None):
@@ -128,7 +128,7 @@ class LocationTree:
 			if(node.hasLeftChild):
 				print "Left child"
 				self.printTree(node.leftchild)
-'''
+	'''
 	#Search the tree for nearest neighbors
 	def searchTree(self, location, nNeighbors = 5):
 		
