@@ -75,7 +75,8 @@
             console.log('Data in the box : ' + $( "#address_text_box" ).val());
     	   // Make a get call to fetch the address for completion
             $.ajax({
-              url: "http://localhost:5000/fetchAddress",
+              //url: "http://localhost:5000/fetchAddress",
+              url: "https://lit-spire-7420.herokuapp.com/fetchAddress",
               data: address + $( "#address_text_box" ).val(),
               success: function(data) {
                     console.log(data);
