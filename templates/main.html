@@ -50,18 +50,59 @@
     <script src="{{ static_url("js/script.js") }}"></script>
 
     <script type="text/javascript">
+
+        $( document ).ready(function() {
+            console.log( "ready!" );
+            $(".results").hide();
+        });
+
     	var addresses = ["Greean street", "Brown street", "Pink street"];
+        var data = "hello";
+        var success = false;
+        var address = "preaddress=";
+        var response = '';
 
-    	jQuery('#address_text_box').on('input', function() {
-    	// do your stuff
+        function loadAddressToTextBox(pos){
+            console.log('loadAddressToTextBox');
+            $(".results").hide();
+            jQuery('#address_text_box').val(pos.name);
+            console.log('address loaded');
+        }
 
-    		$( ".results" ).empty();
-    		console.log('SearchAddress called');
-    		for (i = 0; i < addresses.length; i++) { 
-			    $(".results").append("<li><a href=\"index.html\">" + addresses[i] + "</a></li>");
-			}
+
+    	jQuery('#address_text_box').on('input', function(){
+
+            console.log('Data in the box : ' + $( "#address_text_box" ).val());
+    	   // Make a get call to fetch the address for completion
+            $.ajax({
+              url: "http://localhost:5000/fetchAddress",
+              data: address + $( "#address_text_box" ).val(),
+              success: function(data) {
+                    console.log(data);
+                    addresses = jQuery.parseJSON(data);
+
+                    console.log("response -->");
+                    console.log(addresses);
+
+                    $( ".results" ).empty();
+                    $(".results").show();
+                    console.log('SearchAddress called');
+                    for (var address in addresses) {
+                        console.log('inside for');
+                        console.log(address);
+                        console.log(addresses[address]);
+                        $(".results").append("<li ><a href=\"#\" onClick=\"loadAddressToTextBox(this);\" name=\"" + address + "\" >" + address + "</a></li>");
+                    }
+                }
+              
+            });
+
+            $("#address_text_box").focus(function(){
+              $('.results').css("display","block");
+            });
     		
     	});
+        
         
     </script>
 

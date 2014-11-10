@@ -8,8 +8,8 @@ file = {
     	'address' : 'Address',
     	'status' : 'Status',
     	'latitude': 'Latitude',
-    	'longitude': 'Longitude'
-
+    	'longitude': 'Longitude',
+        'location' : 'Location'
     	}
 }
 

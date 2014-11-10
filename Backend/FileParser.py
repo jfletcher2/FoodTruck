@@ -9,6 +9,7 @@
 # ------------------------------------------
 import csv
 import Distance
+import KDTree
 
 class FileParser():
 
@@ -20,7 +21,8 @@ class FileParser():
         self.nearestLocation = {}
         self.filecontent = {}
         self.fileheader = {}
-
+        self.locationTree = KDTree.LocationTree()
+        
     #Reads the data from the file and loads filecontent and fileheader variable
     def readFile(self):
         if(self.filetype == 'csv'):
@@ -43,9 +45,10 @@ class FileParser():
                             self.fileheader[headerval] = j
                             j = j + 1
                     else:
-                        #Load all the values on to file content
-                        rowContents = {'data' : row}
-                        self.filecontent[row[0]] = rowContents
+                        #Load all the values on to filecontent only is location data is provided
+                        if(row[self.fileheader['Latitude']]):
+                            rowContents = {'data' : row}
+                            self.filecontent[row[0]] = rowContents
                 
         else:
             print "***File Type not supported***"
@@ -105,14 +108,74 @@ class FileParser():
             if(i>50):
                 break
 
+
+
+    #Initializes and loads the location tree(KDTree)
+    def loadLocationTree(self):
+        #Create a list of location from the input data
+        locationlist = []
+        for key, value in self.filecontent.iteritems():
+            #print key
+            #print "Jeromee value laittude"
+            #print value['data'][self.fileheader['Latitude']]
+            #print 'Jerome value longitude'
+            #print value['data'][self.fileheader['Longitude']]
+            locationlist.append((eval((value['data'][self.fileheader['Location']])), key))
+
+        print locationlist
+        #Sort the location list based on Latitude
+        locationlist.sort(key=lambda tup: tup[0])
+
+        print "After sort"
+        print locationlist
+
+        locationlistlength = len(locationlist)
+        print locationlistlength
+
+        if(locationlistlength % 2):
+            median = locationlistlength / 2
+        else:
+            median = (locationlistlength + 1) / 2 
+
+        print median
+        
+        #insert the root of the location tree
+        self.locationTree.put(locationlist[median][0], locationlist[median][1])
+        print ('Put 1')
+        '''
+        locationTree.put(locationlist[median + 1][0], locationlist[median + 1][1])
+        print locationTree.length()
+
+        locationTree.put(locationlist[0][0], locationlist[0][1])
+        print('Put 3')
+        locationTree.put(locationlist[1][0], locationlist[1][1])
+        print('Put 4')
+        locationTree.printTree(locationTree.getRoot())
+        '''
+
+        #insert all the other elements
+            
+        for i in range(len(locationlist)):
+            if(i == median):
+                continue
+            else:
+                self.locationTree.put(locationlist[i][0], locationlist[i][1])
+        #locationTree.printTree(locationTree.getRoot())
+        return self.locationTree
     #ParseFile method manages all the parsing operations
     def parseFile(self, columnnames):
         if(self.inputfile != ''):
-            FileParser.readFile(self)
+            self.readFile()
             #print self.filecontent
+            
+            self.loadAddressLookup(columnnames['address'])
+            #print self.addresslookup
+            locTree = self.loadLocationTree()
             #print self.fileheader
-            FileParser.loadAddressLookup(self, columnnames['address'])
-            print self.addresslookup
+            #Test search tree
+            locTree.searchTree(('37.7925359884311', '-122.3945932'))
+
+            return self.addresslookup['address']
         else:
             print 'Please enter a valid data file.'
 

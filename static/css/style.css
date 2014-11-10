@@ -70,7 +70,7 @@ input {
 .search input:focus + .results { display: block }
 
 .search .results {
-    display: none;
+    display: block;
     position: absolute;
     top: 35px;
     left: 0;
