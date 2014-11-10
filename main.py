@@ -83,10 +83,10 @@ class MainHandler(tornado.web.RequestHandler):
                 google_analytics_id=google_analytics_id,
             )
 
-        print "Get method called"
-        print q
+        #print "Get method called"
+        #print q
         if(q == "fetchAddress"):
-            print "Please fetch the address"
+            #print "Please fetch the address"
             
             preaddress = self.get_argument("preaddress")
             
@@ -97,9 +97,9 @@ class MainHandler(tornado.web.RequestHandler):
         
         #Split the input preaddress to array
         searchaddress = list(preaddress)
-        print searchaddress
+        #print searchaddress
         tempaddresses = self.AddressIndex
-        print self.AddressIndex
+        #print self.AddressIndex
 
         tempAddress = ''
 
@@ -115,9 +115,10 @@ class MainHandler(tornado.web.RequestHandler):
                 tempaddresses = tempaddresses.get(c.lower())
                 tempAddress = tempAddress + c.lower()
             else:
-                print "Invalid address"
+                #print "Invalid address"
+                pass
 
-        print tempAddress
+        #print tempAddress
 
         
         possibleAddresses = {}
