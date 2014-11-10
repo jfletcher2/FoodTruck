@@ -9,7 +9,7 @@
 # ------------------------------------------
 
 import csv
-from KDTree import LocationTree
+import KDTree
 
 
 class FileParser():
@@ -22,7 +22,7 @@ class FileParser():
         self.nearestLocation = {}
         self.filecontent = {}
         self.fileheader = {}
-        self.locationTree = LocationTree()
+        self.locationTree = KDTree.LocationTree()
         
     #Reads the data from the file and loads filecontent and fileheader variable
     def readFile(self):
