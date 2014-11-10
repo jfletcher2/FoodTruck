@@ -101,7 +101,7 @@ class FileParser():
             if(i > 1):
                 try:
                     #print Distance.distance_on_unit_sphere(37.7901490737255, -122.398658184604, 
-                                                        float(row[14]), float(row[15])) * 3960
+                    #                                    float(row[14]), float(row[15])) * 3960
                 except ValueError:
                     pass
             else:
