@@ -67,6 +67,7 @@ class MainHandler(tornado.web.RequestHandler):
     def initialize(self, AddressIndex):
         self.AddressIndex = AddressIndex
 
+
     #Handles all get calls
     def get(self, q):
         if 'GOOGLEANALYTICSID' in os.environ:
