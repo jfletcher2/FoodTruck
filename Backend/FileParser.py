@@ -7,8 +7,12 @@
 #    Created: 11.05.14 | Updated: 11.05.14
 #
 # ------------------------------------------
+import sys
+
+sys.path.append('/Backend')
 import csv
 import KDTree
+
 
 class FileParser():
 
