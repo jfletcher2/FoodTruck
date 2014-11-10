@@ -7,11 +7,9 @@
 #    Created: 11.05.14 | Updated: 11.05.14
 #
 # ------------------------------------------
-import sys
 
-sys.path.append('/Backend')
 import csv
-import KDTree
+from KDTree import LocationTree
 
 
 class FileParser():
@@ -24,7 +22,7 @@ class FileParser():
         self.nearestLocation = {}
         self.filecontent = {}
         self.fileheader = {}
-        self.locationTree = KDTree.LocationTree()
+        self.locationTree = LocationTree()
         
     #Reads the data from the file and loads filecontent and fileheader variable
     def readFile(self):
