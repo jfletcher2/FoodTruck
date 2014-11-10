@@ -51,17 +51,18 @@ class FileParser():
                             self.filecontent[row[0]] = rowContents
                 
         else:
-            print "***File Type not supported***"
+            #print "***File Type not supported***"
+            pass
 
     #Loads the addresslookup variable for each address lookup
     #Each address string is split in to list of characters and
     #loaded into the addresslookup dictionary word by word
     #("eg. 'Hello st' will be {'H'{'e'{'l'{'l'{'o'{' '{'s'{'t':<locationid>}}}}}}}})")
     def loadAddressLookup(self, addresscolname):
-        print addresscolname
+        #print addresscolname
         addressIndex = self.fileheader[addresscolname]
-        print 'Column index : ' 
-        print addressIndex
+        #print 'Column index : ' 
+        #print addressIndex
         i = 0
         for key, val in self.filecontent.iteritems():
             locationid = key
@@ -75,7 +76,7 @@ class FileParser():
             #FileParser.recurse(self, self.addresslookup['address'] ,tempchar, locationid)
 
     def loadaddressdictionaryfromlist(self, listchar, locationid):
-        print listchar
+        #print listchar
         templookup = self.addresslookup.get('address')
         i = 1
         for c in listchar:
@@ -89,22 +90,22 @@ class FileParser():
                 templookup = templookup[c]
                # self.addresslookup = templookup
             i = i + 1
-            print templookup
+            #print templookup
     
     def calculateDistance(self):
         i = 0
         for row in self.filecontent:
             i = i + 1
-            print row[5],row[14], row[15]
+            #print row[5],row[14], row[15]
             
             if(i > 1):
                 try:
-                    print Distance.distance_on_unit_sphere(37.7901490737255, -122.398658184604, 
+                    #print Distance.distance_on_unit_sphere(37.7901490737255, -122.398658184604, 
                                                         float(row[14]), float(row[15])) * 3960
                 except ValueError:
                     pass
             else:
-                print row
+                #print row
             if(i>50):
                 break
 
@@ -122,26 +123,26 @@ class FileParser():
             #print value['data'][self.fileheader['Longitude']]
             locationlist.append((eval((value['data'][self.fileheader['Location']])), key))
 
-        print locationlist
+        #print locationlist
         #Sort the location list based on Latitude
         locationlist.sort(key=lambda tup: tup[0])
 
-        print "After sort"
-        print locationlist
+        #print "After sort"
+        #print locationlist
 
         locationlistlength = len(locationlist)
-        print locationlistlength
+        #print locationlistlength
 
         if(locationlistlength % 2):
             median = locationlistlength / 2
         else:
             median = (locationlistlength + 1) / 2 
 
-        print median
+        #print median
         
         #insert the root of the location tree
         self.locationTree.put(locationlist[median][0], locationlist[median][1])
-        print ('Put 1')
+        #print ('Put 1')
         '''
         locationTree.put(locationlist[median + 1][0], locationlist[median + 1][1])
         print locationTree.length()
@@ -177,6 +178,7 @@ class FileParser():
 
             return self.addresslookup['address']
         else:
-            print 'Please enter a valid data file.'
+            #print 'Please enter a valid data file.'
+            pass
 
 
