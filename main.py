@@ -48,10 +48,10 @@ class Application(tornado.web.Application):
         #print config.file['filename'] 
         filename = config.file['filename']
 
-        print config.file['path']
+        #print config.file['path']
         path = config.file['path']
 
-        print os.path.isfile(path + filename)
+        #print os.path.isfile(path + filename)
         inputFile = path + filename
         filetype = config.file['type']
         fp = fileparser.FileParser(inputFile, filetype)
