@@ -47,8 +47,9 @@ class FileParser():
                             j = j + 1
                     else:
                         #Load all the values on to filecontent only is location data is provided
-                        if(row[self.fileheader['Latitude']]):
-                            rowContents = {'data' : row}
+                        if(row[self.fileheader['Latitude']] and row[self.fileheader['Status']] != 'EXPIRED'):
+                            rowContents = {'data' : row,
+                                           'food' : row[self.fileheader['FoodItems']].split(':')}
                             self.filecontent[row[0]] = rowContents
                 
         else:

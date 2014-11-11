@@ -106,12 +106,24 @@ class MainHandler(tornado.web.RequestHandler):
 
             
 
-            result = self.getNeighbours(addressMap, address)
+            result = self.getNeighboursFromAddress(addressMap, address)
 
             self.write(json.dumps(result))
 
-    #Searches for the nearest neighbor and returns the location data
-    def getNeighbours(self, addressMap, address):
+        if(q == "fetchNeighborsFromLocation"):
+            latitude  = self.get_argument("latitude")
+            longitude = self.get_argument("longitude")
+
+            print latitude
+            print longitude
+
+            result = self.getNeighboursFromLocation(latitude, longitude)
+
+            self.write(json.dumps(result))
+
+
+    #Searches for the nearest neighbors and returns the location data
+    def getNeighboursFromAddress(self, addressMap, address):
 
         try:
             searchlocationid = addressMap[address]
@@ -127,6 +139,16 @@ class MainHandler(tornado.web.RequestHandler):
             return { 'success' : False,
                     'errorMessage' : 'Location not found'}
 
+    #Searched for the nearest neighbours based on the input location
+    def getNeighboursFromLocation(self, latitude, longitude):
+
+        #search the location tree
+        neighbors = self.locationTree.searchTree((latitude, longitude))
+
+        #print neighbors
+        #consolidate results to a map
+        return self.getNeighbourLocationData(neighbors)
+
     #getNeighbourLocationData loops through the neighbors dictionary and fetches all necessary data
     def getNeighbourLocationData(self, neighbors):
 
@@ -138,7 +160,7 @@ class MainHandler(tornado.web.RequestHandler):
             tempResult[locationid] = {
                               'name' : self.filecontent[locationid]['data'][self.fileheader['Applicant']],
                               'type' : self.filecontent[locationid]['data'][self.fileheader['FacilityType']],
-                              'food' : self.filecontent[locationid]['data'][self.fileheader['FoodItems']],
+                              'food' : self.filecontent[locationid]['food'],
                               'address' : self.filecontent[locationid]['data'][self.fileheader['Address']],
                               'latitude' : eval(self.filecontent[locationid]['data'][self.fileheader['Location']])[0],
                               'longitude' : eval(self.filecontent[locationid]['data'][self.fileheader['Location']])[1],

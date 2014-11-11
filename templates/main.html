@@ -37,8 +37,25 @@
     <div id="main">
         <div id="container">
             <h1>{{ page_heading }}</h1>
-
+            <div align="center">
+                <input type="radio" name="group1" id="addressRadioButton" value="Address" checked> Address
+                 <input type="radio" name="group1" id="locationRadioButton" value="Location"> Location<br>
+            </div>
             <section class="main">
+            <div align="center">
+                <table>
+                     <tr>
+                         <td width="150px;">
+                            <input autocomplete="off" id="latitude_text_box" type="text" name="la" placeholder="Latitude..."/>
+                         </td>
+                         <td width='150px;'>
+                         <input autocomplete="off" id="longitude_text_box" type="text" name="la" placeholder="Longitude..."/>
+                         </td>
+
+                     </tr>
+
+                 </table>
+            </div>
              <div class="search" >
                  <table>
                      <tr>
@@ -97,7 +114,26 @@
             $(".results").hide();
             $(".errorMessage").hide();
             $(".CSSTableGenerator").hide();
+            $('#latitude_text_box').attr("disabled", "disabled");
+            $('#longitude_text_box').attr("disabled", "disabled");
         });
+
+        $("input[name='group1']").change(function () {
+            console.log('radio button trigger fired');
+                        if ($("#locationRadioButton").is(':checked')) {
+                            console.log('button chcecked');
+                            $('#address_text_box').attr("disabled", "disabled"); //.attr("placeholder",'Latitude , Longitude');
+                            $('.results').css("display","none");
+                            $('#latitude_text_box').removeAttr("disabled");
+                            $('#longitude_text_box').removeAttr("disabled");
+                        }
+                        else {
+                            console.log('button not chcecked');
+                            $('#latitude_text_box').attr("disabled", "disabled");
+                            $('#longitude_text_box').attr("disabled", "disabled");
+                            $('#address_text_box').removeAttr("disabled"); 
+                        }
+                    });
 
         /**
          * loadAddressToTextBox loads the Address to text box from the list when selected
@@ -114,36 +150,38 @@
          */
         jQuery('#address_text_box').on('input', function(){
 
-            console.log('Data in the box : ' + $( "#address_text_box" ).val());
-           // Make a get call to fetch the address for completion
-            $.ajax({
-             //Local host URL
-              //url: "http://localhost:5000/fetchAddress",
-              url: "https://lit-spire-7420.herokuapp.com/fetchAddress",
-              data: "preaddress=" + $( "#address_text_box" ).val(),
-              success: function(data) {
-                    console.log(data);
-                    addresses = jQuery.parseJSON(data);
+            if ($("#addressRadioButton").is(':checked')) {
+                console.log('Data in the box : ' + $( "#address_text_box" ).val());
+               // Make a get call to fetch the address for completion
+                $.ajax({
+                 //Local host URL
+                  url: "http://localhost:5000/fetchAddress",
+                  //url: "https://lit-spire-7420.herokuapp.com/fetchAddress",
+                  data: "preaddress=" + $( "#address_text_box" ).val(),
+                  success: function(data) {
+                        console.log(data);
+                        addresses = jQuery.parseJSON(data);
 
-                    console.log("response -->");
-                    console.log(addresses);
+                        console.log("response -->");
+                        console.log(addresses);
 
-                    $( ".results" ).empty();
-                    $(".results").show();
-                    console.log('SearchAddress called');
-                    for (var address in addresses) {
-                        console.log('inside for');
-                        console.log(address);
-                        console.log(addresses[address]);
-                        $(".results").append("<li ><a href=\"#\" onClick=\"loadAddressToTextBox(this);\" name=\"" + address + "\" >" + address + "</a></li>");
+                        $( ".results" ).empty();
+                        $(".results").show();
+                        console.log('SearchAddress called');
+                        for (var address in addresses) {
+                            console.log('inside for');
+                            console.log(address);
+                            console.log(addresses[address]);
+                            $(".results").append("<li ><a href=\"#\" onClick=\"loadAddressToTextBox(this);\" name=\"" + address + "\" >" + address + "</a></li>");
+                        }
                     }
-                }
-              
-            });
+                  
+                });
 
-            $("#address_text_box").focus(function(){
-              $('.results').css("display","block");
-            });
+                $("#address_text_box").focus(function(){
+                  $('.results').css("display","block");
+                });
+            }
             
         });
         
@@ -153,38 +191,116 @@
          */
         function submit(){
 
-            console.log('Submit method called');
-            console.log($("#address_text_box").val().length);
+            //console.log('Submit method called');
+            //console.log($("#address_text_box").val().length);
             $(".CSSTableGenerator").hide();
             deleteRows();
-            if($("#address_text_box").val().length > 0){
 
-                $.ajax({
+            if($("#locationRadioButton").is(':checked')) {
+                //validate location
+                console.log("validating location");
+
+                if($('#latitude_text_box').val().length > 0 && $('#longitude_text_box').val().length > 0){
+
+                    lat = $('#latitude_text_box').val()
+                    lon = $('#longitude_text_box').val()
+                    console.log("lat : " + lat);
+                    console.log("lon : " + lon);
+
+                    if(lat)
+                    var validlat = !isNaN(lat);
+                    var validlon = !isNaN(lon);
+
+                    console.log('validlat : ' + validlat);
+                    console.log('validlon : ' + validlon);
+
+                    if(validlat && validlon){
+
+                        console.log('valid values for both');
+                        queryLocation(lat, lon);
+
+                    } else{
+
+                        alert('You have entered an invalid location data. Please enter only floating numbers for Latitude and Longitude!');
+                    }
+                } else {
+
+                    alert('Latitude and longitude cannot be empty when location is selected');
+                }
+                
+            } else {
+                //Check for address
+                if($("#address_text_box").val().length > 0){
+
+                    queryAddress();
+                } else {
+
+                    alert('Address field cannot be empty');
+                }
+
+            }
+            
+            
+        }
+
+        /**
+         *  queryLocation method makes a call to the fetchNeighborsFromAddress webservice
+         */
+        function queryLocation(lat, lon){
+
+            console.log('queryLocation');
+
+            $.ajax({
                  //Local host URL
-                  //url: "http://localhost:5000/fetchNeighborsFromAddress",
-                  url: "https://lit-spire-7420.herokuapp.com/fetchNeighborsFromAddress",
-                  data: "address=" + $( "#address_text_box" ).val(),
+                  url: "http://localhost:5000/fetchNeighborsFromLocation",
+                  //url: "https://lit-spire-7420.herokuapp.com/fetchNeighborsFromAddress",
+                  data: "latitude=" + lat + "&longitude=" + lon,
                   success: function(data) {
-                        console.log(data);
+                        //console.log(data);
                         result = JSON.parse(data);
-                        console.log(result);
-                        console.log(result['success']);
+                        //console.log(result);
+                        //console.log(result['success']);
 
                         if(result['success']){
                             
                             loadResults(result['result']);
                         } else{
-
+                            $(".results").hide();
                             $(".errorMessage").fadeIn();
                         }
                     }
                   
                 });
-            } else {
+        }
 
-                alert('Address field cannot be empty');
-            }
-            
+        /**
+         *  queryAddress method makes a call to the fetchNeighborsFromAddress webservice
+         */
+        function queryAddress(){
+
+            console.log('queryAddress');
+
+            $.ajax({
+                 //Local host URL
+                  url: "http://localhost:5000/fetchNeighborsFromAddress",
+                  //url: "https://lit-spire-7420.herokuapp.com/fetchNeighborsFromAddress",
+                  data: "address=" + $( "#address_text_box" ).val(),
+                  success: function(data) {
+                        //console.log(data);
+                        result = JSON.parse(data);
+                        //console.log(result);
+                        //console.log(result['success']);
+
+                        if(result['success']){
+                            
+                            loadResults(result['result']);
+                        } else{
+                            $(".results").hide();
+                            $(".errorMessage").fadeIn();
+                        }
+                    }
+                  
+                });
         }
 
         /**
