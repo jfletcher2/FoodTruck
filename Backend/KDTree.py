@@ -67,6 +67,7 @@ class LocationTree:
 	#Return the reference to root node
 	def getRoot(self):
 		return self.root
+
 	#Put method to insert the node into the location tree
 	def put(self, key, value):
 		#Check if root is available

@@ -78,7 +78,7 @@ class MainHandler(tornado.web.RequestHandler):
             self.render(
                 "main.html",
                 page_title='Food Truck search',
-                page_heading='Food stop:'
+                page_heading='Food Truck:'
             )
 
         #Handle fetchAddress call
