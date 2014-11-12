@@ -10,17 +10,43 @@ Trucks](https://data.sfgov.org/Permitting/Mobile-Food-Facility-Permit/rqzj-sfat)
 
 ### Solution
 	
-The soltuion contains a front end and a back end with emphasis on backend. 
+The soltuion contains both front end and back end with more emphasis on backend. 
 
-	#### Highlights
-	1. Language used: Python (Backend), Html (Front End) and Javascript (Front End)
-	2. Web server used: Python Tornado web framework
-	3. Experiences: 
-			> Fundamentally strong with algorithms
-			> 1 year of experience with Python 
-			> Minimal experience with front end but developed a demo webstore using PHP for my current employer to showcases the capability of Zuora's REST Api. I architected the front end (Including design) and back end for two main pages [Webstore - subscribe] (http://zillacloudcompany.com/rest/store/subscribe.html) and [Webstore - account] (http://zillacloudcompany.com/rest/store/account.html)
-			> Haven't used python in a while I thoroughly enjoyed coding this project
-	4. Algorithm:
-			> KD Tree datastructure (Location) - For logn look up for nearest neighbors
+	### Highlights
+	1. Key Features:
+		> Address lookup - As and when the user types the address, a get() call is fired to the Tornado server to fetch the possible address
+		> Neighbors search based on address
+		> Neighbors search based on location (latitude and longitude)
+	2. Algorithm:
+		> KD Tree datastructure (Location) - For logn look up for nearest neighbors
+	3. Stats:
+		> Initial runtime at server start:
+			~ Sorting locations - nlogn
+			~ Building KDTree - nlogn
+			~ Builing Address lookup - nlogn
+		> Search runtime:
+			~ Search KDTree - logn
+			~ Address look up - logn
+	4. Consideration: Since I'm using learning algorithm(KDTree) for faster search, accuracy might not be 100% but given the search look up time its practical and almost accurate. Also the code is simple and easy to maintain and modify. Code reusability is also another key point to note.
+	5. Language used: Python (Backend), Html (Front End) and Javascript (Front End)
+	6. Web server used: Python Tornado web framework
+	7. Experience: 
+		> Fundamentally strong with algorithms
+		> 1 year of experience with Python 
+		> Minimal experience with front end but developed a demo webstore using PHP for my current employer to showcases the capability of Zuora's REST Api. I architected the front end (Including design) and back end for two main pages [Webstore - subscribe] (http://zillacloudcompany.com/rest/store/subscribe.html) and [Webstore - account] (http://zillacloudcompany.com/rest/store/account.html)
+		> I thoroughly enjoyed coding this project. It was a very interesting problem to solve
+	
+### Usage:
+	> Neighbors search based on address - Select the Address radio button on screen and type in the address (There should be a list of possible addresses that should populate based on the typed in value) and select one address and click submit. After clicking submit a results table should appear with the nearest neighbors
+	> Neighbors search based on location - Select the Location radio button on screen and type in the latitude and longitude and click submit. After clicking submit a results table should appear with the nearest neighbors. Please note that the location need not match the location on the data file.
 
+### Future implementation ideas:
+	1. Use a better front end UI to map the locations to an actual map and consider superior user experience improvements
+	2. More research on how to improve the accuracy of location neighbors search
+	3. Build similar data structure and look up methods for Food truck names
+	4. Build a search method and data structure that will allow the user to search based on the food items
+
+### Documents:
+	1. API Documents can be found [here] (https://github.com/jfletcher2/FoodTruck/blob/master/API%20document.docx)
+	2. Please click [here] (https://github.com/jfletcher2/FoodTruck/blob/master/Jerome.pdf) for my resume
 	
