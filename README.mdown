@@ -10,7 +10,7 @@ Trucks](https://data.sfgov.org/Permitting/Mobile-Food-Facility-Permit/rqzj-sfat)
 
 ### Solution
 	
-The soltuion contains both front end and back end with more emphasis on backend. 
+The soltuion contains both front end and back end with more emphasis on backend. The solution is hosted on Heroku and can be accessed by clicking [here] (https://lit-spire-7420.herokuapp.com/)
 
 Highlights:
 
@@ -54,5 +54,5 @@ Highlights:
 
 ### Documents:
 API Document can be found [here] (https://github.com/jfletcher2/FoodTruck/blob/master/API%20document.pdf). 
-Please click [here] (https://github.com/jfletcher2/FoodTruck/blob/master/Jerome.pdf) for my resume.
+Please click [here] (https://github.com/jfletcher2/FoodTruck/blob/master/Jerome.pdf) for my resume. Application can be accessed by click [here] (https://lit-spire-7420.herokuapp.com/)
 	
