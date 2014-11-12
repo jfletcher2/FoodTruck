@@ -54,8 +54,8 @@ jQuery('#address_text_box').on('input', function(){
        // Make a get call to fetch the address for completion
         $.ajax({
          //Local host URL
-          url: "http://localhost:5000/fetchAddress",
-          //url: "https://lit-spire-7420.herokuapp.com/fetchAddress",
+          //url: "http://localhost:5000/fetchAddress",
+          url: "https://lit-spire-7420.herokuapp.com/fetchAddress",
           data: "preaddress=" + $( "#address_text_box" ).val(),
           success: function(data) {
 
@@ -138,8 +138,8 @@ function queryLocation(lat, lon){
 
     $.ajax({
          //Local host URL
-          url: "http://localhost:5000/fetchNeighborsFromLocation",
-          //url: "https://lit-spire-7420.herokuapp.com/fetchNeighborsFromLocation",
+          //url: "http://localhost:5000/fetchNeighborsFromLocation",
+          url: "https://lit-spire-7420.herokuapp.com/fetchNeighborsFromLocation",
           data: "latitude=" + lat + "&longitude=" + lon,
           success: function(data) {
 
@@ -164,9 +164,9 @@ function queryAddress(){
 
     $.ajax({
          //Local host URL
-          url: "http://localhost:5000/fetchNeighborsFromAddress",
+          //url: "http://localhost:5000/fetchNeighborsFromAddress",
           //Heroku URL
-          //url: "https://lit-spire-7420.herokuapp.com/fetchNeighborsFromAddress",
+          url: "https://lit-spire-7420.herokuapp.com/fetchNeighborsFromAddress",
           data: "address=" + $( "#address_text_box" ).val(),
           success: function(data) {
 
