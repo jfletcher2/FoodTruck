@@ -1,9 +1,8 @@
-#    Sample main.py Tornado file
-#    (for Tornado on Heroku)
+#    Used the sample main.py from Mike Dory | dory.me for
+#    the skeleton starter code
 #
-#    Author: Mike Dory | dory.me | Jerome Israel
+#    Author: Jerome Israel
 #    Created: 11.12.11 | Updated: 11.08.14
-#    Contributions by Tedb0t, gregory80
 #
 # ------------------------------------------
 
@@ -27,9 +26,10 @@ define("port", default=5000, help="run on the given port", type=int)
 # application settings and handle mapping info
 class Application(tornado.web.Application):
     def __init__(self):
-
-        #self.AddressIndex = {}
+        
+        #Instance of FileParser
         self.fp = None
+
         #Prepare and load data
         self.driver()
 
@@ -47,20 +47,17 @@ class Application(tornado.web.Application):
 
     # Driver method: Drives all parsing and data structure/load operations
     def driver(self):
-        #print config.file['filename'] 
+
         filename = config.file['filename']
 
-        #print config.file['path']
         path = config.file['path']
 
-        #print os.path.isfile(path + filename)
         inputFile = path + filename
         filetype = config.file['type']
-        self.fp = fileparser.FileParser(inputFile, filetype)
-        self.AddressIndex = self.fp.parseFile(config.file['columnnames'])
 
-        #print self.AddressIndex
-        #fp.calculateDistance()
+        self.fp = fileparser.FileParser(inputFile, filetype)
+        self.fp.parseFile(config.file['columnnames'])
+
 
 # the main page
 class MainHandler(tornado.web.RequestHandler):
@@ -76,21 +73,15 @@ class MainHandler(tornado.web.RequestHandler):
 
     #Handles all get calls
     def get(self, q):
-        if 'GOOGLEANALYTICSID' in os.environ:
-            google_analytics_id = os.environ['GOOGLEANALYTICSID']
-        else:
-            google_analytics_id = False
 
         if(q is None):
             self.render(
                 "main.html",
                 page_title='Food Truck search',
-                page_heading='Food stop:',
-                google_analytics_id=google_analytics_id,
+                page_heading='Food stop:'
             )
 
-        #print "Get method called"
-        #print q
+        #Handle fetchAddress call
         if(q == "fetchAddress"):
             #print "Please fetch the address"
             
@@ -98,24 +89,22 @@ class MainHandler(tornado.web.RequestHandler):
             
             self.write(json.dumps(self.fetchAddress(str(preaddress))))
 
+        #Handle fetchNeighborsFromAddress call
         if(q == "fetchNeighborsFromAddress"):
 
             address = self.get_argument("address")
 
             addressMap = self.fetchAddress(str(address))
 
-            
-
             result = self.getNeighboursFromAddress(addressMap, address)
 
             self.write(json.dumps(result))
 
+        #Handle fetchNeighborsFromLocation call
         if(q == "fetchNeighborsFromLocation"):
+
             latitude  = self.get_argument("latitude")
             longitude = self.get_argument("longitude")
-
-            print latitude
-            print longitude
 
             result = self.getNeighboursFromLocation(latitude, longitude)
 
@@ -132,9 +121,9 @@ class MainHandler(tornado.web.RequestHandler):
             #search the location tree
             neighbors = self.locationTree.searchTree(eval(searchlocationdata[self.fileheader['Location']]))
 
-            #print neighbors
             #consolidate results to a map
             return self.getNeighbourLocationData(neighbors)
+
         except KeyError:
             return { 'success' : False,
                     'errorMessage' : 'Location not found'}
@@ -145,7 +134,6 @@ class MainHandler(tornado.web.RequestHandler):
         #search the location tree
         neighbors = self.locationTree.searchTree((latitude, longitude))
 
-        #print neighbors
         #consolidate results to a map
         return self.getNeighbourLocationData(neighbors)
 
@@ -177,9 +165,7 @@ class MainHandler(tornado.web.RequestHandler):
         
         #Split the input preaddress to array
         searchaddress = list(preaddress)
-        #print searchaddress
         tempaddresses = self.AddressIndex
-        #print self.AddressIndex
 
         tempAddress = ''
 
@@ -195,35 +181,26 @@ class MainHandler(tornado.web.RequestHandler):
                 tempaddresses = tempaddresses.get(c.lower())
                 tempAddress = tempAddress + c.lower()
             else:
-                #print "Invalid address"
                 pass
-
-        #print tempAddress
-
         
         possibleAddresses = {}
 
         possibleAddresses = self.recurse(tempaddresses, possibleAddresses, tempAddress)
-        '''
-        for key , val in tempaddresses:
-            if(type(tempaddresses.get(key)) is dict):
-                tempDict = tempaddresses.get(key)
-                while (type(tempDict) is dict):
-                    pass
-        print tempaddresses
-        '''
-        #print possibleAddresses
+
         return possibleAddresses
 
     def recurse(self, d, possibleAddresses, tempAddress):
+
         if type(d)==type({}):
+
             for k in d:
+
                 tempAdd = tempAddress + k
                 possibleAddresses = self.recurse(d[k], possibleAddresses, tempAdd)
         else:
             if(len(possibleAddresses) < 5):
                 possibleAddresses[tempAddress] =  d
-            #print possibleAddresses
+
         return possibleAddresses
 
 
