@@ -12,7 +12,8 @@ Trucks](https://data.sfgov.org/Permitting/Mobile-Food-Facility-Permit/rqzj-sfat)
 	
 The soltuion contains both front end and back end with more emphasis on backend. 
 
-	### Highlights
+Highlights:
+
 	1. Key Features:
 		> Address lookup - As and when the user types the address, a get() call is fired to the Tornado server to fetch the possible address
 		> Neighbors search based on address
@@ -37,16 +38,16 @@ The soltuion contains both front end and back end with more emphasis on backend.
 		> I thoroughly enjoyed coding this project. It was a very interesting problem to solve
 	
 ### Usage:
-	> Neighbors search based on address - Select the Address radio button on screen and type in the address (There should be a list of possible addresses that should populate based on the typed in value) and select one address and click submit. After clicking submit a results table should appear with the nearest neighbors
-	> Neighbors search based on location - Select the Location radio button on screen and type in the latitude and longitude and click submit. After clicking submit a results table should appear with the nearest neighbors. Please note that the location need not match the location on the data file.
+1. Neighbors search based on address - Select the Address radio button on screen and type in the address (There should be a list of possible addresses that should populate based on the typed in value) and select one address and click submit. After clicking submit a results table should appear with the nearest neighbors
+2. Neighbors search based on location - Select the Location radio button on screen and type in the latitude and longitude and click submit. After clicking submit a results table should appear with the nearest neighbors. Please note that the location need not match the location on the data file.
 
 ### Future implementation ideas:
-	1. Use a better front end UI to map the locations to an actual map and consider superior user experience improvements
-	2. More research on how to improve the accuracy of location neighbors search
-	3. Build similar data structure and look up methods for Food truck names
-	4. Build a search method and data structure that will allow the user to search based on the food items
+1. Use a better front end UI to map the locations to an actual map and consider superior user experience improvements
+2. More research on how to improve the accuracy of location neighbors search
+3. Build similar data structure and look up methods for Food truck names
+4. Build a search method and data structure that will allow the user to search based on the food items
 
 ### Documents:
-	1. API Documents can be found [here] (https://github.com/jfletcher2/FoodTruck/blob/master/API%20document.docx)
-	2. Please click [here] (https://github.com/jfletcher2/FoodTruck/blob/master/Jerome.pdf) for my resume
+API Documents can be found [here] (https://github.com/jfletcher2/FoodTruck/blob/master/API%20document.docx). 
+Please click [here] (https://github.com/jfletcher2/FoodTruck/blob/master/Jerome.pdf) for my resume.
 	
